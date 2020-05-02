@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">GovtechRoomBooking</string>
+    <string name="room_booking_title">Book a Room</string>
+    <string name="lbl_date">Date</string>
+    <string name="lbl_time">Time</string>
+    <string name="lbl_room">Rooms</string>
+    <string name="lbl_sort">Sort</string>
+    <string name="lbl_available">Available</string>
+    <string name="lbl_not_available">Not Available</string>
+    <string name="level_display_format">Level %1$s</string>
+    <string name="capacity_display_format">%1$s Pax</string>
 </resources>

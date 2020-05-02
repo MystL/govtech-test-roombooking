@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/rounded_edge_gray_bg"
+    android:paddingStart="@dimen/activity_standard_padding"
+    android:paddingTop="@dimen/activity_standard_padding"
+    android:paddingEnd="@dimen/activity_standard_padding"
+    android:paddingBottom="@dimen/activity_standard_padding"
+    >
+
+    <TextView
+        android:id="@+id/textViewRoomName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/lbl_date"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/text_size_16"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Kopi-O"
+        />
+
+    <TextView
+        android:id="@+id/textViewLevel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:textColor="@color/gunmetal"
+        android:textSize="@dimen/text_size_14"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textViewRoomName"
+        tools:text="Level 8"
+        />
+
+    <TextView
+        android:id="@+id/textViewAvailability"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/lightGrey"
+        android:textSize="@dimen/text_size_14"
+        android:textStyle="italic"
+        app:layout_constraintBottom_toBottomOf="@id/textViewRoomName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/textViewRoomName"
+        tools:text="Not Available"
+        />
+
+    <TextView
+        android:id="@+id/textViewCapacity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/gunmetal"
+        android:textSize="@dimen/text_size_14"
+        app:layout_constraintBottom_toBottomOf="@id/textViewLevel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textViewAvailability"
+        app:layout_constraintTop_toTopOf="@id/textViewLevel"
+        tools:text="8 Pax"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>

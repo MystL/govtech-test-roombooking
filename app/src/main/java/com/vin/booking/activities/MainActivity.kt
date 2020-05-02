@@ -1,13 +1,17 @@
 package com.vin.booking.activities
 
 import android.os.Bundle
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
+import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.Fragment
 import com.vin.booking.R
-import com.vin.booking.viewmodels.RoomBookingViewModel
+import com.vin.booking.fragments.MainFragment
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
+import kotlinx.android.synthetic.main.main_layout.toolbar
+import kotlinx.android.synthetic.main.main_layout.toolbarTitle
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), HasAndroidInjector {
@@ -15,23 +19,31 @@ class MainActivity : AppCompatActivity(), HasAndroidInjector {
     @Inject
     lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Any>
 
-    @Inject
-    lateinit var viewModel: RoomBookingViewModel
-
-    override fun androidInjector(): AndroidInjector<Any> = dispatchingAndroidInjector
+    private lateinit var toolbarDisplay: Toolbar
+    private lateinit var toolbarDisplayTitle: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.main_layout)
+        toolbarDisplay = toolbar
+        toolbarDisplayTitle = toolbarTitle
 
-        viewModel.rooms.observe(this, Observer {
-            // Handle UI Update here
-        })
+        setContentFragment(MainFragment.newInstance())
     }
 
-    override fun onResume() {
-        super.onResume()
-        // Ensure that the Data is re-fetched when this screen is returned
-        viewModel.fetchRooms()
+    /**
+     * Convenient method to set Toolbar title
+     */
+    fun setTitle(title: String) {
+        toolbarDisplayTitle.text = title
+    }
+
+    override fun androidInjector(): AndroidInjector<Any> = dispatchingAndroidInjector
+
+    /**
+     * Method to set a fragment to an activity without adding to backstack
+     */
+    private fun setContentFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction().replace(R.id.content, fragment).commit()
     }
 }
