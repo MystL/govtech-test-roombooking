@@ -46,6 +46,6 @@ class NetworkModule {
     companion object {
         private const val CONNECTION_TIMEOUT = 30L
 
-        internal const val BASE_DOMAIN = "https://api.data.gov.sg"
+        internal const val BASE_DOMAIN = "https://gist.githubusercontent.com/"
     }
 }

@@ -7,4 +7,5 @@ class Api @Inject constructor(retrofit: Retrofit) {
 
     private val apiService = retrofit.create(ApiService::class.java)
 
+    suspend fun fetchRooms() = apiService.fetchRoomsAsync()
 }

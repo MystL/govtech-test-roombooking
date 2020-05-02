@@ -1,5 +1,8 @@
-package com.vin.booking
+package com.vin.booking.testing
 
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LifecycleRegistry
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.GsonBuilder
 import com.vin.booking.api.Api
@@ -16,9 +19,12 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
 import java.nio.charset.StandardCharsets
 
+/**
+ * Base Class for convenience functions for testing
+ * For this exercise, will just gather all necessary/reusable functions in this
+ */
 open class BaseTestCase {
-
-    protected var server: MockWebServer? = null
+    private var server: MockWebServer? = null
 
     @After
     @Throws(Exception::class)
@@ -90,13 +96,31 @@ open class BaseTestCase {
         }
     }
 
-    private fun getResourceAsString(name: String): String {
+    protected fun getResourceAsString(name: String): String {
         val inputStream = javaClass.classLoader?.getResourceAsStream(name)
         return try {
             val source = inputStream?.source()?.buffer()
             source?.readString(StandardCharsets.UTF_8).orEmpty()
         } catch (e: IOException) {
             throw RuntimeException("Error reading $name\n$e")
+        }
+    }
+
+    companion object {
+        /** A [LifecycleOwner] in [androidx.lifecycle.Lifecycle.State.RESUMED] state.  */
+        val LIFECYCLE_OWNER: LifecycleOwner = object : LifecycleOwner {
+            private val mLifecycle = init()
+            private fun init(): LifecycleRegistry {
+                val registry = LifecycleRegistry(this)
+                registry.handleLifecycleEvent(Lifecycle.Event.ON_CREATE)
+                registry.handleLifecycleEvent(Lifecycle.Event.ON_START)
+                registry.handleLifecycleEvent(Lifecycle.Event.ON_RESUME)
+                return registry
+            }
+
+            override fun getLifecycle(): Lifecycle {
+                return mLifecycle
+            }
         }
     }
 }
