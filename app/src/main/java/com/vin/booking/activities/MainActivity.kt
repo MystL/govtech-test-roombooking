@@ -27,6 +27,12 @@ class MainActivity : AppCompatActivity(), HasAndroidInjector {
         setContentView(R.layout.main_layout)
         toolbarDisplay = toolbar
         toolbarDisplayTitle = toolbarTitle
+        setSupportActionBar(toolbar)
+        val actionBar = supportActionBar
+        if (actionBar != null) {
+            actionBar.setDisplayShowTitleEnabled(false)
+            actionBar.elevation = resources.displayMetrics.density
+        }
 
         setContentFragment(MainFragment.newInstance())
     }

@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import com.vin.booking.di.AppComponent
 import com.vin.booking.di.DaggerAppComponent
+import com.vin.booking.di.InjectableFragment
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
@@ -60,7 +61,9 @@ class App : Application(), HasAndroidInjector {
                     override fun onFragmentCreated(
                         fm: FragmentManager, f: Fragment, savedInstanceState: Bundle?
                     ) {
-                        AndroidSupportInjection.inject(f)
+                        if (f is InjectableFragment) {
+                            AndroidSupportInjection.inject(f)
+                        }
                     }
                 }, true)
         }

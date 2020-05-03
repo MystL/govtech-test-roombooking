@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#6200EE</color>
-    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorPrimary">@android:color/white</color>
+    <color name="colorPrimaryDark">@color/lighterGrey</color>
     <color name="colorAccent">#03DAC5</color>
 
     <color name="lightestGrey">#e7ecef</color>
@@ -9,4 +9,5 @@
     <color name="lightGrey">#707982</color>
     <color name="gunmetal">#4f5a60</color>
     <color name="availableGreen">#ff99cc00</color>
+    <color name="blue">#4267b2</color>
 </resources>

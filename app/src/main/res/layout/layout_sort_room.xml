@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/rounded_edge_white_bg"
+    android:paddingStart="@dimen/activity_standard_padding"
+    android:paddingTop="@dimen/activity_standard_padding"
+    android:paddingEnd="@dimen/activity_standard_padding"
+    android:paddingBottom="@dimen/activity_standard_padding"
+    >
+
+    <TextView
+        android:id="@+id/textViewSortTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/lbl_sort"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/text_size_16"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <RadioGroup
+        android:id="@+id/sortGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_standard_padding"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/sortLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginTop="8dp"
+            android:layoutDirection="rtl"
+            android:text="@string/lbl_sort_location"
+            android:textAlignment="textStart"
+            />
+
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/sortCapacity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginTop="8dp"
+            android:layoutDirection="rtl"
+            android:text="@string/lbl_sort_capacity"
+            android:textAlignment="textStart"
+            />
+
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/sortAvailability"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginTop="8dp"
+            android:layoutDirection="rtl"
+            android:text="@string/lbl_sort_available"
+            android:textAlignment="textStart"
+            />
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/resetButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_larger"
+        android:background="@drawable/grey_circle_button"
+        android:text="@string/lbl_btn_reset"
+        android:textColor="@android:color/white"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintHorizontal_weight="0.30"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sortGroup"
+        />
+
+    <Button
+        android:id="@+id/applySortButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/activity_standard_padding"
+        android:background="@drawable/blue_circle_button"
+        android:text="@string/lbl_btn_apply"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="@id/resetButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="0.70"
+        app:layout_constraintStart_toEndOf="@id/resetButton"
+        app:layout_constraintTop_toTopOf="@id/resetButton"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

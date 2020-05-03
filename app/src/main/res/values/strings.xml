@@ -9,4 +9,10 @@
     <string name="lbl_not_available">Not Available</string>
     <string name="level_display_format">Level %1$s</string>
     <string name="capacity_display_format">%1$s Pax</string>
+    <string name="lbl_menu_scan">Scan</string>
+    <string name="lbl_btn_reset">Reset</string>
+    <string name="lbl_btn_apply">Apply</string>
+    <string name="lbl_sort_location">Location</string>
+    <string name="lbl_sort_capacity">Capacity</string>
+    <string name="lbl_sort_available">Availability</string>
 </resources>

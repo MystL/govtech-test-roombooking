@@ -14,6 +14,7 @@ import kotlinx.android.synthetic.main.item_room.view.textViewRoomName
 class RoomsDisplayAdapter : RecyclerView.Adapter<RoomItem>() {
 
     private val _dataSet = mutableListOf<RoomItemDisplay>()
+    val dataSet: List<RoomItemDisplay> get() = _dataSet
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         RoomItem(
