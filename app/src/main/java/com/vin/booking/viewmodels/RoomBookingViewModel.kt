@@ -1,5 +1,6 @@
 package com.vin.booking.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -7,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.vin.booking.CoroutineContext
 import com.vin.booking.adapters.RoomItemDisplay
 import com.vin.booking.models.Room
+import com.vin.booking.models.toRoomItemDisplay
 import com.vin.booking.repositories.BookingRepository
 import com.vin.booking.utils.extensions.getDayOfMonthSuffix
 import kotlinx.coroutines.launch
@@ -56,7 +58,11 @@ class RoomBookingViewModel @Inject constructor(
     }
 
     fun getRoomsForTimeSlot(timeSlot: String): List<Room> {
-        return _rooms.value?.filter { it.availability?.containsKey(timeSlot) == true } ?: listOf()
+        val updatedList =
+            _rooms.value?.filter { it.availability?.containsKey(timeSlot) == true } ?: listOf()
+        val displayList = updatedList.map { it.toRoomItemDisplay(timeSlot) }
+        _sortedDisplayRooms.value = displayList
+        return updatedList
     }
 
     fun sortRoomsBy(rules: SortRules, data: List<RoomItemDisplay>) {

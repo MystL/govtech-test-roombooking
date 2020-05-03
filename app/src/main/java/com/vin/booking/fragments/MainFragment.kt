@@ -6,6 +6,7 @@ import android.app.TimePickerDialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -84,16 +85,30 @@ class MainFragment : Fragment(), HasAndroidInjector, InjectableFragment {
 
         viewModel.fetchRoomsError.observe(this, Observer {
             recyclerViewRoomsList.visibility = View.GONE
-            showErrorDialog(it, DialogInterface.OnClickListener { dialog, id ->
-                // If error, allows to re-fetching the rooms
-                viewModel.fetchRooms()
-                toggleProgressBar(true)
-            })
+            showErrorDialog(
+                it,
+                getString(R.string.lbl_error_msg),
+                getString(R.string.lbl_retry_btn),
+                getString(R.string.lbl_cancel_btn),
+                DialogInterface.OnClickListener { dialog, id ->
+                    // If error, allows to re-fetching the rooms
+                    viewModel.fetchRooms()
+                    toggleProgressBar(true)
+                })
         })
 
         viewModel.sortedDisplayRooms.observe(this, Observer {
             it?.takeIf { it.isNotEmpty() }?.let { sortedDisplay ->
                 roomsDisplayAdapter.setData(sortedDisplay)
+            } ?: run {
+                roomsDisplayAdapter.setData(listOf())
+                showErrorDialog(
+                    getString(R.string.lbl_no_result),
+                    getString(R.string.lbl_no_result_msg),
+                    getString(R.string.lbl_ok_btn),
+                    null,
+                    null
+                )
             }
         })
 
@@ -103,6 +118,7 @@ class MainFragment : Fragment(), HasAndroidInjector, InjectableFragment {
 
         viewModel.currentTimeDisplay.observe(this, Observer {
             textViewTimeDisplay.text = viewModel.getFormattedTimeDisplay()
+            viewModel.getRoomsForTimeSlot(viewModel.currentTimeDisplay.value ?: "")
         })
 
         datePickerListener = DatePickerDialog.OnDateSetListener { _, y, m, d ->
@@ -203,16 +219,27 @@ class MainFragment : Fragment(), HasAndroidInjector, InjectableFragment {
         }
     }
 
-    private fun showErrorDialog(msg: String, listener: DialogInterface.OnClickListener) {
-        AlertDialog.Builder(requireContext())
-            .setTitle(msg)
-            .setMessage(getString(R.string.lbl_error_msg))
-            .setPositiveButton(
+    private fun showErrorDialog(
+        title: String,
+        msg: String,
+        positiveBtn: String?,
+        negativeBtn: String?,
+        listener: DialogInterface.OnClickListener?
+    ) {
+        val dialog = AlertDialog.Builder(requireContext())
+            .setTitle(title)
+            .setMessage(msg)
+        if (positiveBtn != null) {
+            dialog.setPositiveButton(
                 getString(R.string.lbl_retry_btn),
                 listener
             )
-            .setNegativeButton(getString(R.string.lbl_cancel_btn), null)
-            .show()
+        }
+
+        if (negativeBtn != null) {
+            dialog.setNegativeButton(getString(R.string.lbl_cancel_btn), null)
+        }
+        dialog.show()
     }
 
     private fun navigateToWebView(url: String) {
@@ -225,8 +252,17 @@ class MainFragment : Fragment(), HasAndroidInjector, InjectableFragment {
     }
 
     private fun initSelectionView() {
-        viewModel.setCurrentDate(calendar)
-        viewModel.setCurrentTime(calendar)
+        val currentTime = calendar.get(Calendar.HOUR_OF_DAY)
+        val currentMin = calendar.get(Calendar.MINUTE)
+        if (calendar.get(Calendar.HOUR_OF_DAY) > 19
+            && calendar.get(Calendar.MINUTE) > 30
+        ) {
+            Log.d("XXX" , "Over timing liao")
+            calendar.set(Calendar.HOUR_OF_DAY, 19)
+            calendar.set(Calendar.MINUTE, 30)
+            viewModel.setCurrentDate(calendar)
+            viewModel.setCurrentTime(calendar)
+        }
     }
 
     private fun showDatePicker() {
