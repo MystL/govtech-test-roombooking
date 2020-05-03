@@ -20,4 +20,4 @@ App should be able to run from Android studio with a connected device/emulator.
 
 If for some reason the mentioned is not possible, latest APK build of the project can be found here
 
-
+https://www.dropbox.com/s/8k743ollfl2d9kk/govtech-test-room-booking.apk?dl=0
