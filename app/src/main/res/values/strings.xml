@@ -15,4 +15,8 @@
     <string name="lbl_sort_location">Location</string>
     <string name="lbl_sort_capacity">Capacity</string>
     <string name="lbl_sort_available">Availability</string>
+    <string name="lbl_back_to_home">Back to Home</string>
+    <string name="lbl_error_msg">Would you like to retry?</string>
+    <string name="lbl_retry_btn">Retry</string>
+    <string name="lbl_cancel_btn">Cancel</string>
 </resources>

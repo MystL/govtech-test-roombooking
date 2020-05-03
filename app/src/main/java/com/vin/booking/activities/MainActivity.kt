@@ -1,6 +1,7 @@
 package com.vin.booking.activities
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -50,6 +51,18 @@ class MainActivity : AppCompatActivity(), HasAndroidInjector {
      * Method to set a fragment to an activity without adding to backstack
      */
     private fun setContentFragment(fragment: Fragment) {
-        supportFragmentManager.beginTransaction().replace(R.id.content, fragment).commit()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.content, fragment)
+            .commit()
+    }
+
+    /**
+     * Convenient method to add a fragment to backstack
+     */
+    fun navigateToFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction()
+            .addToBackStack(null)
+            .replace(R.id.content, fragment)
+            .commit()
     }
 }

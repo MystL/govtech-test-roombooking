@@ -3,6 +3,7 @@ package com.vin.booking.fragments
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,11 +12,14 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.vin.booking.R
 import com.vin.booking.activities.MainActivity
+import com.vin.booking.activities.WebViewActivity
+import com.vin.booking.activities.WebViewActivity.Companion.WEB_VIEW_URL
 import com.vin.booking.adapters.RoomsDisplayAdapter
 import com.vin.booking.di.InjectableFragment
 import com.vin.booking.models.toRoomItemDisplay
@@ -26,6 +30,7 @@ import com.vin.booking.viewmodels.SortRules
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
 import kotlinx.android.synthetic.main.layout_room_booking.dateGroup
+import kotlinx.android.synthetic.main.layout_room_booking.progressBarRoomsList
 import kotlinx.android.synthetic.main.layout_room_booking.recyclerViewRoomsList
 import kotlinx.android.synthetic.main.layout_room_booking.textViewDateDisplay
 import kotlinx.android.synthetic.main.layout_room_booking.textViewSort
@@ -50,12 +55,6 @@ class MainFragment : Fragment(), HasAndroidInjector, InjectableFragment {
     private var datePickerListener: DatePickerDialog.OnDateSetListener? = null
     private var timePickerListener: TimePickerDialog.OnTimeSetListener? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        mainActivity?.setTitle(getString(R.string.room_booking_title))
-        setHasOptionsMenu(true)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -64,6 +63,9 @@ class MainFragment : Fragment(), HasAndroidInjector, InjectableFragment {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        mainActivity?.setTitle(getString(R.string.room_booking_title))
+        setHasOptionsMenu(true)
 
         initSelectionView()
 
@@ -74,10 +76,19 @@ class MainFragment : Fragment(), HasAndroidInjector, InjectableFragment {
                 val mapped = filteredRooms.map { r -> r.toRoomItemDisplay(currentTime) }
                 // We will cache this to cater for the reset of sort
                 viewModel.setUnsortedDisplayDataSet(mapped)
+                recyclerViewRoomsList.visibility = View.VISIBLE
+                toggleProgressBar(false)
                 roomsDisplayAdapter.setData(mapped)
-            } ?: run {
-                // TODO - don't show the list
             }
+        })
+
+        viewModel.fetchRoomsError.observe(this, Observer {
+            recyclerViewRoomsList.visibility = View.GONE
+            showErrorDialog(it, DialogInterface.OnClickListener { dialog, id ->
+                // If error, allows to re-fetching the rooms
+                viewModel.fetchRooms()
+                toggleProgressBar(true)
+            })
         })
 
         viewModel.sortedDisplayRooms.observe(this, Observer {
@@ -130,6 +141,7 @@ class MainFragment : Fragment(), HasAndroidInjector, InjectableFragment {
         super.onStart()
         // Ensure that the Data is re-fetched when this screen is returned
         viewModel.fetchRooms()
+        toggleProgressBar(true)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -138,7 +150,13 @@ class MainFragment : Fragment(), HasAndroidInjector, InjectableFragment {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.action_scan) {
-            // TODO go to Scan Fragment
+            mainActivity?.navigateToFragment(ScanQRFragment.newInstance().apply {
+                listener = object : ScanQRFragment.ScannerResultListener {
+                    override fun onResult(result: String) {
+                        navigateToWebView(result)
+                    }
+                }
+            })
             return true
         }
         return super.onOptionsItemSelected(item)
@@ -185,6 +203,27 @@ class MainFragment : Fragment(), HasAndroidInjector, InjectableFragment {
         }
     }
 
+    private fun showErrorDialog(msg: String, listener: DialogInterface.OnClickListener) {
+        AlertDialog.Builder(requireContext())
+            .setTitle(msg)
+            .setMessage(getString(R.string.lbl_error_msg))
+            .setPositiveButton(
+                getString(R.string.lbl_retry_btn),
+                listener
+            )
+            .setNegativeButton(getString(R.string.lbl_cancel_btn), null)
+            .show()
+    }
+
+    private fun navigateToWebView(url: String) {
+        context?.startActivity(
+            Intent().apply {
+                setClass(requireContext(), WebViewActivity::class.java)
+                putExtra(WEB_VIEW_URL, url)
+            }
+        )
+    }
+
     private fun initSelectionView() {
         viewModel.setCurrentDate(calendar)
         viewModel.setCurrentTime(calendar)
@@ -219,6 +258,16 @@ class MainFragment : Fragment(), HasAndroidInjector, InjectableFragment {
                 setTargetFragment(this@MainFragment, SORT_REQUEST_CODE)
                 show(fa.supportFragmentManager, SortRoomFragment.TAG)
             }
+        }
+    }
+
+    private fun toggleProgressBar(show: Boolean) {
+        if (show) {
+            progressBarRoomsList.visibility = View.VISIBLE
+            recyclerViewRoomsList.visibility = View.GONE
+        } else {
+            progressBarRoomsList.visibility = View.GONE
+            recyclerViewRoomsList.visibility = View.VISIBLE
         }
     }
 

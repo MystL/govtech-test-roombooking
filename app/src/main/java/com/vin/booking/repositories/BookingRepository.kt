@@ -15,7 +15,7 @@ class BookingRepository @Inject constructor(private val api: Api) {
         return try {
             val r = api.fetchRooms()
             r?.takeIf { it.isNotEmpty() } ?: listOf()
-        } catch (e: Exception) {
+        } catch (e: Exception) { // the exception is thrown by Retrofit
             listOf()
         }
     }
