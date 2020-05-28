@@ -26,6 +26,9 @@ class MainActivity : AppCompatActivity(), HasAndroidInjector {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_layout)
+        for(i in 0..10) {
+            Log.d("XXX", "something")
+        }
         toolbarDisplay = toolbar
         toolbarDisplayTitle = toolbarTitle
         setSupportActionBar(toolbar)
