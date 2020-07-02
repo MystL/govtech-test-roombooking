@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity(), HasAndroidInjector {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_layout)
         for(i in 0..10) {
-            Log.d("XXX", "something")
+            Log.d("XXX", "make some changes first")
         }
         toolbarDisplay = toolbar
         toolbarDisplayTitle = toolbarTitle
